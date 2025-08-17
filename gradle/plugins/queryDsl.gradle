@@ -1,39 +1,39 @@
-
+/**
+ * QueryDSL plugin for Java 17
+ */
 class QueryDslPlugin implements Plugin<Project> {
 
     void apply(Project project) {
-        def generatedSourcesDir = "${project.projectDir}/build/generated/sources/annotationProcessor/java/main"
-        def sourceSets = project.sourceSets
-
-        project.task('generateQueryDSL', type: JavaCompile, group: 'build') {
+        def generatedDir = "${project.buildDir}/generated/sources/annotationProcessor/java/main"
+        
+        project.task('generateQueryDSL', type: JavaCompile) {
             doFirst {
-                project.delete generatedSourcesDir
-                project.file(generatedSourcesDir).mkdirs()
+                project.delete(generatedDir)
+                project.file(generatedDir).mkdirs()
             }
-
-            classpath = sourceSets.main.compileClasspath
-            setDestinationDir(new File(generatedSourcesDir))
-
-            source = sourceSets.main.java
-            options.annotationProcessorPath = sourceSets.main.annotationProcessorPath
+            
+            source = project.sourceSets.main.java
+            classpath = project.configurations.compileClasspath
+            options.annotationProcessorPath = project.configurations.annotationProcessor
             options.compilerArgs = [
-                "-proc:only",
+                "-proc:only", 
                 "-processor", "com.querydsl.apt.jpa.JPAAnnotationProcessor",
-                "-s", generatedSourcesDir
+                "-Aquerydsl.entityAccessors=true",
+                "-s", generatedDir
             ]
+            destinationDirectory = project.file(generatedDir)
         }
-
-        def compileJavaTask = getTask(project, 'compileJava')
-        def generateQueryDslTask = getTask(project, 'generateQueryDSL')
-        compileJavaTask.dependsOn generateQueryDslTask
+        
+        project.sourceSets {
+            main {
+                java {
+                    srcDirs += [generatedDir]
+                }
+            }
+        }
+        
+        project.compileJava.dependsOn('generateQueryDSL')
     }
-
-    private static getTask(Project project, String name) {
-        return project
-            .tasks
-            .matching { it.name == name } [0]
-    }
-
 }
 
 apply plugin: QueryDslPlugin

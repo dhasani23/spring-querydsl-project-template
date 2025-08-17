@@ -9,3 +9,4 @@ public class AppApplicationTests extends AbstractITest {
     }
 
 }
+

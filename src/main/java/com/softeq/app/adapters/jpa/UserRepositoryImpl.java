@@ -1,24 +1,31 @@
 package com.softeq.app.adapters.jpa;
 
-import static com.softeq.app.domain.QUser.user;
-
 import com.softeq.app.domain.User;
 import com.softeq.app.domain.UserRepositoryCustom;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class UserRepositoryImpl extends AbstractRepositoryImpl implements UserRepositoryCustom {
+public class UserRepositoryImpl implements UserRepositoryCustom {
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public List<User> findByLastName(String lastName) {
-        return query()
-                .select(user)
-                .from(user)
-                .where(user.lastName.eq(lastName))
-                .fetch();
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<User> query = cb.createQuery(User.class);
+        Root<User> user = query.from(User.class);
+        query.select(user)
+             .where(cb.equal(user.get("lastName"), lastName));
+        return entityManager.createQuery(query).getResultList();
     }
-
 }
