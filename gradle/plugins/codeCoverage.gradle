@@ -3,11 +3,11 @@ apply plugin: 'jacoco'
 class CodeCoveragePlugin implements Plugin<Project> {
 
     void apply(Project project) {
-        def execFiles = project.fileTree(project.buildDir).include("/jacoco/*.exec")
+        def execFiles = project.fileTree(project.layout.buildDirectory).include("/jacoco/*.exec")
 
         project.jacocoTestReport {
             executionData(execFiles)
-            reports { xml.enabled = true }
+            reports { xml.required.set(true) }
         }
 
         project.jacocoTestCoverageVerification {

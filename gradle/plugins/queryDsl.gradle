@@ -12,7 +12,7 @@ class QueryDslPlugin implements Plugin<Project> {
             }
 
             classpath = sourceSets.main.compileClasspath
-            setDestinationDir(new File(generatedSourcesDir))
+            setDestinationDirectory(new File(generatedSourcesDir))
 
             source = sourceSets.main.java
             options.annotationProcessorPath = sourceSets.main.annotationProcessorPath
