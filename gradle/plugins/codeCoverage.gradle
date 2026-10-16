@@ -6,11 +6,13 @@ class CodeCoveragePlugin implements Plugin<Project> {
         def execFiles = project.fileTree(project.layout.buildDirectory).include("/jacoco/*.exec")
 
         project.jacocoTestReport {
+            dependsOn project.tasks.withType(Test)
             executionData(execFiles)
             reports { xml.required.set(true) }
         }
 
         project.jacocoTestCoverageVerification {
+            dependsOn project.tasks.withType(Test)
             executionData(execFiles)
             violationRules { rule { limit {
                 counter = 'LINE'

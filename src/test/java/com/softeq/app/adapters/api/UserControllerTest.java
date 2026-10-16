@@ -76,7 +76,7 @@ class UserControllerTest {
     void testOnException() {
         ResponseEntity<?> result = controller.onException();
 
-        assertEquals(404, result.getStatusCodeValue());
+        assertEquals(404, result.getStatusCode().value());
     }
 
     @Test
