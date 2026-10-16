@@ -4,7 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/Softeq/spring-querydsl-project-template/badge.svg?branch=master)](https://coveralls.io/github/Softeq/spring-querydsl-project-template?branch=master)
 
 There are Java project template that integrates next technologies:
-1. [Spring Boot 2](https://spring.io/projects/spring-boot)
+1. [Spring Boot 3](https://spring.io/projects/spring-boot)
 2. [Spring Data JPA](https://spring.io/projects/spring-data-jpa)
 3. [QueryDSL JPA](http://www.querydsl.com/)
 4. [Liquibase](https://www.liquibase.org/)
